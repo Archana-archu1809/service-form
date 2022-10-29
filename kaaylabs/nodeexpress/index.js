@@ -32,6 +32,20 @@ app.post("/Register",(req,res)=>{
 
   })
 })
+app.post("/login",(req,res)=>{
+  const email=req.body.email;
+  const password=req.body.password;
+  db.query("SELECT * FROM Register where email = ? & password = ?",[email,password],(err,result)=>{
+   if (err){
+    throw err
+   }
+   if(result.length >0){
+    res.send(result);
+   }else{
+    res.send({message:"Wrong password nd email combination"})
+   }
+  })
+})
 app.listen("8000", () => {
   console.log("server started on 8000");
 });
