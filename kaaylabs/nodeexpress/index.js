@@ -20,10 +20,16 @@ app.post("/Register",(req,res)=>{
   const name=req.body.name;
   const email=req.body.email;
   const password=req.body.password;
-  db.query("INSERT INTO Register(name,email,password) VALUES(?,?,?)",[name,email,password],(err,result)=>{
+  const gender=req.body.gender;
+  const experienc=req.body.experienc;
+  const technology=req.body.technology;
+  const rating=req.body.rating;
+
+  db.query("INSERT INTO Register(name,email,password,gender, experienc, technology, rating) VALUES(?,?,?,?,?,?,?)",[name,email,password,gender, experienc, technology, rating],(err,result)=>{
     if(err) throw err;
     console.log(result)
     return res.send({
+      err:false,
       
     Id:result.insertId,
     name:name,
@@ -35,11 +41,13 @@ app.post("/Register",(req,res)=>{
 app.post("/login",(req,res)=>{
   const email=req.body.email;
   const password=req.body.password;
-  db.query("SELECT * FROM Register where email = ? & password = ?",[email,password],(err,result)=>{
+  db.query("SELECT * FROM Register WHERE email = ? AND password = ?",
+  [email,password],
+  (err,result)=>{
    if (err){
     throw err
    }
-   if(result.length >0){
+   if(result.length > 0){
     res.send(result);
    }else{
     res.send({message:"Wrong password nd email combination"})
