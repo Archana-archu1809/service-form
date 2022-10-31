@@ -25,7 +25,7 @@ app.post("/Register",(req,res)=>{
   const technology=req.body.technology;
   const rating=req.body.rating;
 
-  db.query("INSERT INTO Register(name,email,password,gender, experienc, technology, rating) VALUES(?,?,?,?,?,?,?)",[name,email,password,gender, experienc, technology, rating],(err,result)=>{
+  db.query("INSERT INTO Sign(name,email,password,gender, experienc, technology, rating) VALUES(?,?,?,?,?,?,?)",[name,email,password,gender, experienc, technology, rating],(err,result)=>{
     if(err) throw err;
     console.log(result)
     return res.send({
@@ -41,7 +41,7 @@ app.post("/Register",(req,res)=>{
 app.post("/login",(req,res)=>{
   const email=req.body.email;
   const password=req.body.password;
-  db.query("SELECT * FROM Register WHERE email = ? AND password = ?",
+  db.query("SELECT * FROM Sign WHERE email = ? AND password = ?",
   [email,password],
   (err,result)=>{
    if (err){
