@@ -35,5 +35,9 @@ const User=sequelize.define("Users",{
         type:DataTypes.STRING,
         allownull:false,
     },
+    admin: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
 })
 module.exports=User;
