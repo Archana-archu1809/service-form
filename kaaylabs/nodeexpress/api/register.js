@@ -17,4 +17,5 @@ router.post("/register",async (req,res)=>{
     })
  if(savedUser)   res.json({message:"thanks for registering"})
 })
+
 module.exports=router;
