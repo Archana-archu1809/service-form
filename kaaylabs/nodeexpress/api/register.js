@@ -1,15 +1,16 @@
 const express= require ("express");
 const router=express.Router();
 const User=require("../models/user");
+const Resume=require("../models/index")
 router.post("/register",async (req,res)=>{
-    const {name,email,password,gender,experience,technology,rating}=req.body;
-    const alreadyUser=await User.findOne({where:{email}}).catch((err)=>{
+    const {name,email,password,gender,experience,skills,sslc,sslcpercentage,hsc,hscpercentage,ug,ugpercentage,pg,pgpercentage,address}=req.body;
+    const alreadyUser=await Resume.findOne({where:{email}}).catch((err)=>{
         console.log("Error" ,err)
     });
     if(alreadyUser){
         return res.json({message:"user already exists"})
     }
-    const newUser=new User({name,email,password,gender,experience,technology,rating});
+    const newUser=new Resume({name,email,password,gender,experience,skills,sslc,sslcpercentage,hsc,hscpercentage,ug,ugpercentage,pg,pgpercentage,address});
 
  const savedUser=  await newUser.save().catch((err)=>{
         console.log("Error", err);
