@@ -1,15 +1,14 @@
 const express= require ("express");
 
-const User=require("../models/user");
 const dbConfig= require('../config/config.json')
 const jwt=require("jsonwebtoken");
-const Resume = require("../models/index");
+const User=require("../models/registers")
 const router=express.Router();
 
 
 router.post("/login",async (req,res)=>{
     const{email,password}=req.body;
-    const userWithEmail=await Resume.findOne({where:{email}}).catch((err)=>{
+    const userWithEmail=await User.findOne({where:{email}}).catch((err)=>{
         console.log("Error",err);
     })
    

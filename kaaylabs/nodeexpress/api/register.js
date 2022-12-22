@@ -1,22 +1,24 @@
 const express= require ("express");
 const router=express.Router();
 const User=require("../models/user");
-const Resume=require("../models/index")
-router.post("/register",async (req,res)=>{
-    const {name,email,password,gender,experience,skills,sslc,sslcpercentage,hsc,hscpercentage,ug,ugpercentage,pg,pgpercentage,address}=req.body;
-    const alreadyUser=await Resume.findOne({where:{email}}).catch((err)=>{
-        console.log("Error" ,err)
-    });
-    if(alreadyUser){
-        return res.json({message:"user already exists"})
-    }
-    const newUser=new Resume({name,email,password,gender,experience,skills,sslc,sslcpercentage,hsc,hscpercentage,ug,ugpercentage,pg,pgpercentage,address});
+const Resume=require("../models/index");
+const Register=require("../models/registers")
+router.post("/register", async(req,res)=>{
+    const {name,email,password,phonenumber,workstatus,resume,checkbox}=req.body;
+    const alreadyUser=await Register.findOne({where:{email}}).catch((err)=>{
+                console.log("Error" ,err)
+            });
+            if(alreadyUser){
+                return res.json({message:"user already exists"})
+            }
+    const newUser=new Register({name,email,password,phonenumber,workstatus,resume,checkbox});
+    const saveUser=await newUser.save().catch((err)=>{
+        console.log("Error",err);
+        res.json({message:"cannot register at that moment"})
 
- const savedUser=  await newUser.save().catch((err)=>{
-        console.log("Error", err);
-        res.json({message:"cannot register at the moment"})
-    })
- if(savedUser)   res.json({message:"thanks for registering"})
+    });
+    if(saveUser)
+    res.json({message:"thanks for registering"})
 })
 
 module.exports=router;
