@@ -9,7 +9,7 @@ const router=express.Router();
 
 router.post("/login",async (req,res)=>{
     const{email,password}=req.body;
-    const userWithEmail=await Resume.findOne({where:{email}}).catch((err)=>{
+    const userWithEmail=await User.findOne({where:{email}}).catch((err)=>{
         console.log("Error",err);
     })
    
