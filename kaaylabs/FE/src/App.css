@@ -1,0 +1,29 @@
+@import '~antd/dist/antd.css';
+.header{
+    color: black;
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+}
+.row{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.button{
+    width:100%
+}
+.logout{
+    margin:10px;
+}
+.h1{
+    text-align: center;
+}
+.h2{
+    text-align: center;
+    color: white;
+}
+.card{
+    width:300px;
+}

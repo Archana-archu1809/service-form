@@ -110,7 +110,7 @@ const CreateForm1 = ({ open, onCreate, onCancel }) => {
         what makes you unique and right person for the job you are looking for.
       </p>
       <Form form={form} layout="vertical">
-        <Form.Item label="Is this your current employment"name="currentemp">
+        <Form.Item label="Is this your current employment"name="currentEmp">
           <Radio.Group>
             <Radio value="Yes"> Yes </Radio>
             <Radio value="No"> No </Radio>
@@ -322,10 +322,10 @@ const CreateForm3 = ({ open, onCreate, onCancel }) => {
           </Form.Item>
          
   
-          <Form.Item label="worked from" name="workfrom">
-            <Select placeholder="select year">
-              <Select.Option value="2002">2002</Select.Option>
-              <Select.Option value="2001">2001</Select.Option>
+          <Form.Item label="ProjectStatus" name="projectStatus">
+            <Select placeholder="select status">
+              <Select.Option value="inProgress">Inprogress</Select.Option>
+              <Select.Option value="completed">Completed</Select.Option>
             </Select>
             
           </Form.Item>
@@ -393,7 +393,7 @@ const CreateForm3 = ({ open, onCreate, onCancel }) => {
             ]}>
             <Input placeholder="Select Role Category" />
           </Form.Item>
-          <Form.Item label="Job Role" name="Job Role"  rules={[
+          <Form.Item label="Job Role" name="jobRole"  rules={[
               {
                 required: true,
                 message: "Please input your jobRole!",
@@ -451,7 +451,7 @@ const CreateForm3 = ({ open, onCreate, onCancel }) => {
       
       <p>Tell recruiters what you know or what you are known for e.g. Direct Marketing, Oracle, Java etc. We will send you job recommendations based on these skills. Each skill is separated by a comma.</p>
         <Form form={form} layout="vertical">
-        <Form.Item label="Key Skills" name="keySkills"  rules={[
+        <Form.Item label="Key Skills" name="skills"  rules={[
               {
                 required: true,
                 message: "Please input your skills!",
@@ -530,7 +530,7 @@ const CreateForm3 = ({ open, onCreate, onCancel }) => {
                 required: true,
                 message: "Please input your gender!",
               },
-            ]}>
+            ]} name="gender">
           <Radio.Group>
             <Radio value="Male"> Male</Radio>
             <Radio value="Female"> Female </Radio>
@@ -543,7 +543,7 @@ const CreateForm3 = ({ open, onCreate, onCancel }) => {
                 required: true,
                 message: "Please input your marital status!",
               },
-            ]}>
+            ]} name="maritalStatus">
           <Radio.Group>
             <Radio value="Single"> Single</Radio>
             <Radio value="Married"> Married </Radio>
@@ -579,7 +579,7 @@ const CreateForm3 = ({ open, onCreate, onCancel }) => {
         
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="Permanent Address" name="address" rules={[
+        <Form.Item label="Permanent Address" name="Address" rules={[
               {
                 required: true,
                 message: "Please input your address",
@@ -587,7 +587,7 @@ const CreateForm3 = ({ open, onCreate, onCancel }) => {
             ]}>
             <Input placeholder="Type Permanent Address" />
           </Form.Item>
-          <Form.Item label="Hometown" name="hometown" rules={[
+          <Form.Item label="Hometown" name="homeTown" rules={[
               {
                 required: true,
                 message: "Please input your hometown",
@@ -595,7 +595,7 @@ const CreateForm3 = ({ open, onCreate, onCancel }) => {
             ]}>
             <Input placeholder="Type hometown" />
           </Form.Item>
-          <Form.Item label="Pincode" name="pincode"  rules={[
+          <Form.Item label="Pincode" name="pinCode"  rules={[
               {
                 required: true,
                 message: "Please input your pincode",
@@ -843,6 +843,7 @@ function Index() {
   const [open12, setOpen12] = useState(false);
   const [open13, setOpen13] = useState(false);
   const [open14, setOpen14] = useState(false);
+  const [userData, setUserData] = useState({});
   const [result,setResult]=useState({})
   const onCreate = (values) => {
     console.log(values.resumeHeadline);
@@ -967,8 +968,10 @@ function Index() {
       ...values
     }));
   };
-  const { id} = useParams();
+  const { UserId} = useParams();
+  console.log(UserId)
   const data=localStorage.getItem("key")
+  
   const config={
     headers:{
 authorization:`Bearer` + data
@@ -977,10 +980,16 @@ authorization:`Bearer` + data
   console.log(data)
  
   useEffect(()=>{
-    Axios.get(`http://localhost:8000/datass/${id}`,config).then((response)=>{
-      console.log(response)
+   const id= localStorage.getItem("id")
+    Axios.get(`http://localhost:8000/datass/${id}`,{
+      headers:{
+        "x-access-token":localStorage.getItem("key")
+      },
+    }).then((response)=>{
+      console.log(response.data[0])
+      setUserData(response.data[0])
     })
-  },[config, id])
+  },[])
   
   useEffect(()=>{
     let result1= Object.keys (result).length;
@@ -1022,12 +1031,12 @@ if(result ===52){
     certificationTitle:result.certificationTitle,
     certificationComplettionID:result.certificationComplettionID,
     certificationId:result.certificationId,
-    CurrentIndsutry:result.CurrentIndsutry,
-    Department:result.Department,
-    RoleCategory:result.RoleCategory,
+    CurrentIndsutry:result.industry,
+    Department:result.department,
+    RoleCategory:result.roleCategory,
     jobRole:result.jobRole,
     preferredType:result.preferredType,
-    preferredWorkLocation:result.preferredWorkLocation,
+    preferredWorkLocation:result.preferredWork,
     desiredJobType:result.desiredJobType,
     desiredEmploymentType:result.desiredEmploymentType,
     expectedSalary:result.expectedSalary,
@@ -1061,27 +1070,18 @@ if(result ===52){
           }}
         >
           <Card style={{ width: "300px" }} bordered={false} title="Quick Links">
-            <Row>
-              <Col sm={12}>
-                <h3>Resume</h3>
-              </Col>
-              <Col sm={12}>
-                <Button type="link"   onClick={() => {
-                    setOpen9(true);
-                  }}>Add</Button>
-
-
-              </Col>
-            </Row>
+          
             <Row>
               <Col sm={12}>
                 <h3>Resume Headline</h3>
+               
               </Col>
               <Col sm={12}>
                 <Button type="link"  onClick={() => {
                     setOpen(true);
                   }}>Add</Button>
               </Col>
+            
             </Row>
             <Row>
               <Col sm={12}>
@@ -1171,32 +1171,7 @@ if(result ===52){
             </Row>
           </Card>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <Card
-              style={{ width: "500px", margin: "4px" }}
-              bordered={false}
-              title="Resume"
-            >
-              <p>
-                Resume is the most important document recruiters look for.
-                Recruiters generally do not look at profiles without resumes.
-              </p>
-              <Button
-                  type="link"
-                  onClick={() => {
-                    setOpen9(true);
-                  }}
-                >
-                  {" "}
-                  Add Resume 
-                </Button>
-              <CreateForm9
-                  open={open9}
-                  onCreate={onCreate9}
-                  onCancel={() => {
-                    setOpen9(false);
-                  }}
-                />
-            </Card>
+          
 
             <Card style={{ width: "500px", margin: "4px" }} bordered={false}>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -1210,6 +1185,7 @@ if(result ===52){
                   {" "}
                   Add Resume Headline
                 </Button>
+                
                 <CreateForm
                   open={open}
                   onCreate={onCreate}
@@ -1218,12 +1194,14 @@ if(result ===52){
                   }}
                 />
               </div>
-
-              <p>
+              {userData.ResumeHeadline === "" ? <p>
                 It is the first thing recruiters notice in your profile. Write
                 concisely what makes you unique and right person for the job you
                 are looking for.
-              </p>
+              </p>:  <h3>{userData.ResumeHeadline}</h3>}
+
+             
+             
             </Card>
             <Card style={{ width: "500px", margin: "4px" }}>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -1245,6 +1223,7 @@ if(result ===52){
                   }}
                 />
               </div>
+              <h3>{userData.skills}</h3>
             </Card>
             <Card style={{ width: "500px", margin: "4px" }}>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -1285,6 +1264,9 @@ if(result ===52){
                   }}
                 />
               </div>
+              <h3>{userData.education}</h3>
+              <h3>{userData.university}</h3>
+              
             </Card>
             <Card style={{ width: "500px", margin: "4px" }}>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -1300,6 +1282,8 @@ if(result ===52){
                   }}
                 />
               </div>
+            <h3>SoftwareName:  {userData.softwareName}</h3>
+              <h3>Software Version :{userData.softwareVersion}</h3>
             </Card>
             <Card style={{ width: "500px", margin: "4px" }}>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -1335,6 +1319,7 @@ if(result ===52){
                   }}
                 />
               </div>
+              <h3>{userData.profileSummary}</h3>
             </Card>
             <Card style={{ width: "500px", margin: "4px" }}>
               <h3>Accomplishments</h3>
@@ -1445,6 +1430,16 @@ if(result ===52){
                   }}
                 />
               </div>
+              <div>
+                <h2>Personal</h2>
+              <h3>{userData.gender}</h3>
+              <h3>{userData.maritalStatus}</h3>
+
+              </div>
+              <h3>Address:{userData.Address}</h3>
+              <h3>Hpmetown:{userData.homeTown}</h3>
+              <h3>PinCode:{userData.pinCode}</h3>
+              
             </Card>
           </div>
         </div>

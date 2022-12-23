@@ -5,7 +5,7 @@ import { useState } from "react";
 import {useNavigate} from "react-router-dom"
 
 function Login(){
-    const [loginStatus,setLoginStatus]=useState("");
+    const [loginStatus,setLoginStatus]=useState(false);
     const navigate=useNavigate();
    
     const onFinish = (values) => {
@@ -17,8 +17,9 @@ function Login(){
           password: values.password,
         
         }).then((response) => {
-          if (response.data.token) {
+          if (response.data.auth === true) {
             setLoginStatus(response.data.token);
+            localStorage.setItem("id",response.data.id)
             console.log(response.data.token)
             
           

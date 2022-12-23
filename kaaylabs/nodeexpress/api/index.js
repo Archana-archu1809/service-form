@@ -6,6 +6,7 @@ const adminSide=require("./adminSide")
 const usersApi=require("./data");
 const viewApi=require("./user");
 const data=require("./view");
+const update=require("./update")
 const router=express.Router();
 
 router.use(registerApi);
@@ -15,4 +16,6 @@ router.use(adminSide);
 router.use(usersApi);
 router.use(viewApi);
 router.use(data);
+router.use(update)
+
 module.exports=router;
