@@ -10,11 +10,11 @@ await  resumeData.update(req.body,{
 .then(num => {
     if (num == 1) {
       res.send({
-        message: "Tutorial was updated successfully."
+        message: "User was updated successfully."
       });
     } else {
       res.send({
-        message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`
+        message: `Cannot update User with id=${id}. Maybe User was not found or req.body is empty!`
       });
     }
   })
